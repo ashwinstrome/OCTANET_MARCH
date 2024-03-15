@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="input-container">
+            <input type="text" id="taskInput" placeholder="Enter a new task">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+        <ul id="taskList">
+            <!-- Tasks will be added dynamically here -->
+        </ul>
+        <button id="deleteAllBtn" onclick="deleteAllTasks()" class="delete-btn" disabled>Delete Selected Tasks</button>
+    </div>
+
+    <script>
+        function addTask() {
+            var taskInput = document.getElementById("taskInput");
+            var taskText = taskInput.value.trim();
+            if (taskText !== "") {
+                var taskList = document.getElementById("taskList");
+                var newTask = document.createElement("li");
+                newTask.innerHTML = `
+                    <input type="checkbox" class="task-checkbox" onchange="toggleDeleteButton()">
+                    <span class="task-text">${taskText}</span>
+                `;
+                taskList.appendChild(newTask);
+                taskInput.value = "";
+                toggleDeleteButton();
+            } else {
+                alert("Please enter a task!");
+            }
+        }
+
+        function toggleDeleteButton() {
+            var deleteButton = document.getElementById("deleteAllBtn");
+            var taskCheckboxes = document.querySelectorAll(".task-checkbox");
+            var anyChecked = false;
+            taskCheckboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    anyChecked = true;
+                }
+            });
+            deleteButton.disabled = !anyChecked;
+        }
+
+        function deleteAllTasks() {
+            var taskList = document.getElementById("taskList");
+            var taskCheckboxes = document.querySelectorAll(".task-checkbox:checked");
+            taskCheckboxes.forEach(function(checkbox) {
+                checkbox.parentNode.remove();
+            });
+            toggleDeleteButton();
+        }
+    </script>
+</body>
+</html>
